@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface WhiskeyViewController : UIViewController
+#import "ViewController.h"
+@interface WhiskeyViewController : ViewController
 
 @property (weak, nonatomic) UITextField *beerPercentTextField;
 @property (weak, nonatomic) UISlider *beerCountSlider;
