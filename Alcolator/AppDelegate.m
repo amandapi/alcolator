@@ -8,9 +8,10 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "MainMenuViewController.h"
+#import "WhiskeyViewController.h"
 
-@interface AppDelegate ()
+// Assignment # 1 of checkpoint "tapped navigation"
+@interface AppDelegate () <UITabBarControllerDelegate>
 
 @end
 
@@ -23,12 +24,23 @@
    
     // Override point for customization after application launch.
     
-    MainMenuViewController *mainMenuViewController = [[MainMenuViewController alloc] init];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mainMenuViewController]; // different classes have different initializers, and the best way is to check in class references
-    self.window.rootViewController = navigationController;
+    ViewController *wineVC = [[ViewController alloc] init];
+    WhiskeyViewController *whiskeyVC = [[WhiskeyViewController alloc] init];
+    UITabBarController *tabBarVC = [[UITabBarController alloc] init];
+    tabBarVC.viewControllers = @[wineVC, whiskeyVC];
+    tabBarVC.delegate = self; /* assignment #2 of checkpoint "tapped navigation": assign AppDelegate as UITabBarController's delegate property */
+    
+    self.window.rootViewController = tabBarVC;
     [self.window makeKeyAndVisible];
     return YES;
 }
+
+// Assignment #3 of checkpoint "tapped navigation"
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController  {
+    NSLog(@"New view controller selected: %@", viewController.title);
+}
+// end Assignment #3
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

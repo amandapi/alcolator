@@ -16,11 +16,18 @@
 
 // DELETE PRE-WRITTEN METHODS: initiWithNibName:bundle:, viewDidLoad, didReceiveMemoryWarning…
 
+- (instancetype) init {
+    self = [super init];
+    if (self) {
+        self.title = NSLocalizedString(@"Whiskey", nil);
+    }
+    return self;
+}
 
 // Need to override viewDidLoad here to set a title
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Whiskey", @"whiskey");
+    self.view.backgroundColor = [UIColor colorWithRed:0.992 green:0.992 blue:0.588 alpha:1]; /*#fdfd96 which is a beautiful pastel yellow*/
 }
 
 // assignment 2 - first to override sliderValueDidChange method
@@ -28,53 +35,8 @@
 - (void)sliderValueDidChange:(UISlider *)sender {
     NSLog(@"Slider value changed to %f", sender.value);
     [self.beerPercentTextField resignFirstResponder];
-    
-    // Assignment 2 of Checkpoint Tapped Navigation - to show numbers of glasses of wine or shots of whiskeys in title view
-    // Maths (copied all the math lines from whiskey buttonPressed method - some lines are probably not needed but I am trying to be lazy here):
-    
-    // first, calculate how much alcohol is in all those beers ...
-    
-    int numberOfBeers = self.beerCountSlider.value;
-    int ouncesInOneBeerGlass = 12; //assume they are 12 oz bottles
-    
-    float alcoholPercentageOfBeer = [self.beerPercentTextField.text floatValue]/100;
-    float ouncesOfAlcoholPerBeer = ouncesInOneBeerGlass * alcoholPercentageOfBeer;
-    float ouncesOfAlcoholTotal = ouncesOfAlcoholPerBeer * numberOfBeers;
-    
-    // now, calculate the equivalent amount of whiskey ...
-    
-    float ouncesInOneWhiskeyGlass = 1;  // a 1oz shot
-    float alcoholPercentageOfWhiskey = 0.4;  // 40% is average
-    
-    float ouncesOfAlcoholPerWhiskeyGlass = ouncesInOneWhiskeyGlass * alcoholPercentageOfWhiskey;
-    float numberOfWhiskeyGlassesForEquivalentAlcoholAmount = ouncesOfAlcoholTotal / ouncesOfAlcoholPerWhiskeyGlass;
-    
-    // decide whether to use "beer"/"beers" and "glass"/"glasses"
-    
-    NSString *beerText;
-    
-    if (numberOfBeers == 1) {
-        beerText = NSLocalizedString(@"beer", @"singular beer");
-    } else {
-        beerText = NSLocalizedString(@"beers", @"plural of beer");
-    }
-    
-    NSString *whiskeyText;
-    
-    if (numberOfWhiskeyGlassesForEquivalentAlcoholAmount == 1) {
-        whiskeyText = NSLocalizedString(@"shot", @"singular shot");
-    } else {
-        whiskeyText = NSLocalizedString(@"shots", @"plural of shot");
-    }
-    
-    // Generate text on title view
-    
-    NSString *titleViewText = [NSString stringWithFormat:NSLocalizedString(@"Whiskey %.1f %@.", nil), numberOfWhiskeyGlassesForEquivalentAlcoholAmount, whiskeyText];
-    
-    [self.navigationItem setTitle:titleViewText];
-    
-    // End assigment 2
-}
+    [self.tabBarItem setBadgeValue:[NSString stringWithFormat:@"%d", (int) sender.value]];
+ }
 
 
 - (void)buttonPressed:(UIButton *)sender;

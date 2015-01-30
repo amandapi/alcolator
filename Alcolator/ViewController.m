@@ -42,6 +42,17 @@
     self.hideKeyboardTapGestureRecognizer = tap;
 }
 
+- (instancetype) init {
+    self = [super init];
+    // set title here
+    if (self) {
+        self.title = NSLocalizedString(@"Wine", @"wine");
+        
+        // Since we don't have icons, let's move the title to the middle of the tab bar
+        [self.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -18)];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     
@@ -85,8 +96,8 @@
     // Get rid of the maximum number of lines on the label
     self.resultLabel.numberOfLines = 0;
     
-    // Set a title for the controller
-    self.title = NSLocalizedString(@"Wine", @"wine");
+    // Set a background color for the controller
+    self.view.backgroundColor = [UIColor colorWithRed:0.741 green:0.925 blue:0.714 alpha:1]; /*#bdec6 which is a beautiful pastel green*/
 }
 
 - (void) viewWillLayoutSubviews {
@@ -143,52 +154,8 @@
 - (void)sliderValueDidChange:(UISlider *)sender {
     NSLog(@"Slider value changed to %f", sender.value);
     [self.beerPercentTextField resignFirstResponder];
+    [self.tabBarItem setBadgeValue:[NSString stringWithFormat:@"%d", (int) sender.value]];
     
-    // Assignment 2 of Checkpoint Tapped Navigation - to show numbers of glasses of wine or shots of whiskeys in title view
-    // Maths (copied all the math lines from buttonPressed method - some lines are probably not needed but I am trying to be lazy here):
-    
-    // first, calculate how much alcohol is in all those beers ...
-    
-    int numberOfBeers = self.beerCountSlider.value;
-    int ouncesInOneBeerGlass = 12; //assume they are 12 oz bottles
-    
-    float alcoholPercentageOfBeer = [self.beerPercentTextField.text floatValue]/100;
-    float ouncesOfAlcoholPerBeer = ouncesInOneBeerGlass * alcoholPercentageOfBeer;
-    float ouncesOfAlcoholTotal = ouncesOfAlcoholPerBeer * numberOfBeers;
-    
-    // now, calculate the equivalent amount of wine ...
-    
-    float ouncesInOneWineGlass = 5; // wine glasses are usually 5 oz
-    float alcoholPercentageOfWine = 0.13; // 13% is average
-    
-    float ouncesOfAlcoholPerWineGlass = ouncesInOneWineGlass * alcoholPercentageOfWine;
-    float numberOfWineGlassesForEquivalentAlcoholAmount = ouncesOfAlcoholTotal / ouncesOfAlcoholPerWineGlass;
-    
-    // decide whether to use "beer"/"beers" and "glass"/"glasses"
-    
-    NSString *beerText;
-    
-    if (numberOfBeers == 1) {
-        beerText = NSLocalizedString(@"beer", @"singular beer");
-    } else {
-        beerText = NSLocalizedString(@"beers", @"plural of beer");
-    }
-    
-    NSString *wineText;
-    
-    if (numberOfWineGlassesForEquivalentAlcoholAmount == 1){
-        wineText = NSLocalizedString(@"glass", @"singular glass");
-    } else {
-        wineText = NSLocalizedString(@"glasses", @"plural of glass");
-    }
-    
-    // Generate text on title view
-    
-    NSString *titleViewText = [NSString stringWithFormat:NSLocalizedString(@"Wine %.1f %@.", nil), numberOfWineGlassesForEquivalentAlcoholAmount, wineText];
-    
-    [self.navigationItem setTitle:titleViewText];
-
-    // End assigment 2
     }
 
 - (void)buttonPressed:(UIButton *)sender {
