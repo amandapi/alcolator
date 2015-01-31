@@ -66,7 +66,7 @@
     self.beerPercentTextField.delegate = self;
     
     // Assignment 3 of Checkpoint Sizing and Styling to change text field background to non transparent
-    [_beerPercentTextField setBackgroundColor:[UIColor whiteColor]];
+    [self.beerPercentTextField setBackgroundColor:[UIColor whiteColor]];
     // End Assignment 3
     
     // Set the placeholder text
@@ -100,22 +100,24 @@
     self.view.backgroundColor = [UIColor colorWithRed:0.741 green:0.925 blue:0.714 alpha:1]; /*#bdec6 which is a beautiful pastel green*/
 }
 
+
+
+
 - (void) viewWillLayoutSubviews {
     
     [super viewWillLayoutSubviews];
     
-    // Assignment 2 of Checkpoint Sizing and Styling to fit app to different devices - replace 320 by CGRectGetWidth(self.view.frame);
+ 
+    // To fit app to different devices - replace 320 by CGRectGetWidth(self.view.frame);
     //CGFloat viewWidth = 320;
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
-    // end Assignment 2
-    
+    // Also redefine Height for use later to "save the button"
+    CGFloat viewHeight = CGRectGetHeight(self.view.frame);
     CGFloat padding = 20;
     CGFloat itemWidth = viewWidth - padding - padding;
     CGFloat itemHeight = 44;
     
-    // own assignment "0" The beerPercentTextField was too high and hidden by he navigation bar so I changed y-padding to padding * 4
-    
-    self.beerPercentTextField.frame = CGRectMake(padding, padding * 4, itemWidth, itemHeight); // meaning 20, 20*4, 280, 44
+    self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight); // meaning 20, 20, 280, 44
     
     CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame); // CGRectMaxY calculate this: y of frame + height of frame: 20 further down
     self.beerCountSlider.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);  // meaning 20, 64 + 20, 280, 44
@@ -127,13 +129,15 @@
     self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 4);
     
     CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
-    self.calculateButton.frame = CGRectMake(padding,bottomOfLabel + padding, itemWidth, itemHeight); // this affects the appearance immediately  the view will be redrawn at the location we specified
     
-    // Assignment 1 of Checkpoint Sizing and Styling to make the app handle all rotations by adding this line:
-    [self.view convertRect:self.view.frame fromView:self.view.superview];
-    // End of Assignment 1
-    
+    // save the calculateButton!
+
+    if (viewWidth > viewHeight) {  /*this is in landscape mode and we need to save the button*/
+    self.calculateButton.frame = CGRectMake(padding, bottomOfLabel - itemHeight*4, itemWidth, itemHeight);
+    } else {
+    self.calculateButton.frame = CGRectMake(padding, bottomOfLabel, itemWidth, itemHeight);} // this affects the appearance immediately the view will be redrawn at the location we specified
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
